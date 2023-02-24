@@ -16,7 +16,7 @@ chatgpt = ChatGPT()
 # domain root
 @app.route('/')
 def home():
-    return 'Hello, World!1600'
+    return 'Hello, World!1612'
 
 @app.route("/webhook", methods=['POST'])
 def callback():
@@ -40,17 +40,17 @@ def handle_message(event):
     if event.message.type != "text":
         return
     
-    if not event.message.text.lower().startswith("$$"):
+    if not event.message.text.lower().startswith("%%"):
         return
     
-    if event.message.text.replace("$$", "", 1) == "啟動":
+    if event.message.text.replace("%%", "", 1) == "啟動":
         working_status = True
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="我是時下流行的AI智能，目前可以為您服務囉，歡迎來跟我互動~"))
         return
 
-    if event.message.text.replace("$$", "", 1) == "安靜":
+    if event.message.text.replace("%%", "", 1) == "安靜":
         working_status = False
         line_bot_api.reply_message(
             event.reply_token,
