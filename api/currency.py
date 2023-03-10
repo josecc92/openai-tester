@@ -14,4 +14,4 @@ class Currency:
         if currency_index in div_element.text:
             value = f"{div_element.text.strip()}匯率: {div_element.find_next('td', {'data-table': '本行現金賣出'}).text.strip()}"
             return value
-    return '無匯率'
+    return f"查無{currency_index}匯率"
