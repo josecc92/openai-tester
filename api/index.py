@@ -43,6 +43,9 @@ def handle_message(event):
         return
     
     if event.message.text.lower().startwith("$$"):
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="Test $$"))        
         reply_msg = currency.get_currency(event.message.text)
         line_bot_api.reply_message(
             event.reply_token,
