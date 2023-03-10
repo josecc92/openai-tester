@@ -13,7 +13,7 @@ working_status = os.getenv("DEFALUT_TALKING", default = "true").lower() == "true
 
 app = Flask(__name__)
 chatgpt = ChatGPT()
-currency = currency()
+currency = Currency()
 
 # domain root
 @app.route('/')
