@@ -22,7 +22,7 @@ def home():
 @app.route("/qrScan")
 def qrScan():
     try:
-        return render_template("api/qrScan.html")
+        return render_template("qrScan.html")
     except Exception as e:
         return f"發生錯誤: {str(e)}"
     return
