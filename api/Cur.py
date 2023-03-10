@@ -17,3 +17,4 @@ class Cur:
     value = f"{div_element.text.strip()}匯率: {div_element.find_next('td', {'data-table': '本行現金賣出'}).text.strip()}"
     print(value)
     return value
+  
