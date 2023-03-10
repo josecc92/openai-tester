@@ -42,6 +42,12 @@ def handle_message(event):
     if event.message.type != "text":
         return
     
+    if not event.message.text.lower().startswith("$$"):
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="我是時下流行的AI智能，歡迎來跟我互動~"))
+        return  
+    
     if not event.message.text.lower().startswith("%%"):
         return
     
