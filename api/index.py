@@ -3,22 +3,19 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from api.chatgpt import ChatGPT
-from currency import Currency
 
 import os
 
 line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 line_handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
 working_status = os.getenv("DEFALUT_TALKING", default = "true").lower() == "true"
-
 app = Flask(__name__)
 chatgpt = ChatGPT()
-currency = Currency()
+
 # domain root
 @app.route('/')
 def home():
-    result = currency.get_currency('USD')
-    return 'Hello, World!1112'+result
+    return 'Hello, World!1112'
 
 
 @app.route("/webhook", methods=['POST'])
