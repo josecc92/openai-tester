@@ -2,7 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-class Currency:
+class currency:
   def __init__(self):
     pass
 
