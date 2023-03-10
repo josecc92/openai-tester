@@ -13,12 +13,11 @@ working_status = os.getenv("DEFALUT_TALKING", default = "true").lower() == "true
 
 app = Flask(__name__)
 chatgpt = ChatGPT()
-currency = Currency()
 
 # domain root
 @app.route('/')
 def home():
-    return 'Hello, World!1612'
+    return 'Hello, World!1112'
 
 @app.route("/webhook", methods=['POST'])
 def callback():
@@ -43,10 +42,6 @@ def handle_message(event):
         return
     
     if event.message.text.lower().startswith("$$"):
-        replyMsg = currency.get_currency(event.message.text)
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=replyMsg))
         return
     
     if not event.message.text.lower().startswith("%%"):
