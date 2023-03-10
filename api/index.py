@@ -19,6 +19,9 @@ currency = Currency()
 def home():
     return 'Hello, World!1112'
 
+@app.route("/qrScan")
+def qrScan():
+    return render_template("api/qrScan.html")
 
 @app.route("/webhook", methods=['POST'])
 def callback():
