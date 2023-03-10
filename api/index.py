@@ -42,11 +42,16 @@ def handle_message(event):
     if event.message.type != "text":
         return
     
-    if event.message.text.lower().startswith("%%%"):
-        msg = currency.get_currenct('USD')
+    if event.message.text.lower().startswith("$$"):
+        try:
+            msg = currency.get_currenct('USD')
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=msg))
+        except Exception as e:
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=msg))
+            TextSendMessage(text=f"發生錯誤: {str(e)}"))
         return  
     
     if not event.message.text.lower().startswith("%%"):
