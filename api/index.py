@@ -21,7 +21,11 @@ def home():
 
 @app.route("/qrScan")
 def qrScan():
-    return render_template("api/qrScan.html")
+    try:
+        return render_template("api/qrScan.html")
+    except Exception as e:
+        return f"發生錯誤: {str(e)}"
+    return
 
 @app.route("/webhook", methods=['POST'])
 def callback():
