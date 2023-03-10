@@ -3,6 +3,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from api.chatgpt import ChatGPT
+from api.currency import currency
 
 import os
 
@@ -41,6 +42,10 @@ def handle_message(event):
         return
     
     if event.message.text.lower().startswith("$$"):
+        reply_msg = currency.get_currency(event.message.text)
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply_msg))
         return
     
     if not event.message.text.lower().startswith("%%"):
