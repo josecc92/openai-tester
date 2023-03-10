@@ -43,9 +43,10 @@ def handle_message(event):
         return
     
     if event.message.text.lower().startswith("$$"):
+        msg = currency.get_currenct('USD')
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="我是時下流行的AI智能，歡迎來跟我互動~"))
+            TextSendMessage(text=msg))
         return  
     
     if not event.message.text.lower().startswith("%%"):
