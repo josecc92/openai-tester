@@ -42,12 +42,6 @@ def handle_message(event):
     if event.message.type != "text":
         return
     
-    if event.message.text.lower().startwith("$$"):
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="Test $$"))
-        return
-    
     if not event.message.text.lower().startswith("%%"):
         return
     
