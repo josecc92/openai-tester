@@ -45,11 +45,7 @@ def handle_message(event):
     if event.message.text.lower().startwith("$$"):
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="Test $$"))        
-        reply_msg = currency.get_currency(event.message.text)
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=reply_msg))
+            TextSendMessage(text="Test $$"))
         return
     
     if not event.message.text.lower().startswith("%%"):
