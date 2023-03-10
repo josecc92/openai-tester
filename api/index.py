@@ -3,7 +3,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from api.chatgpt import ChatGPT
-from api.currency import currency
+from api.currency import Currency
 
 import os
 
@@ -13,6 +13,7 @@ working_status = os.getenv("DEFALUT_TALKING", default = "true").lower() == "true
 
 app = Flask(__name__)
 chatgpt = ChatGPT()
+currency = Currency()
 
 # domain root
 @app.route('/')
