@@ -44,7 +44,7 @@ def handle_message(event):
     
     if event.message.text.lower().startswith("$$"):
         try:
-            msg = currency.get_currency(event.message.text.replace("%%", "", 1).strip())
+            msg = currency.get_currency(event.message.text.replace("$$", "", 1).strip())
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=msg))
