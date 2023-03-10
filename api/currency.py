@@ -1,3 +1,7 @@
+import requests
+import re
+from bs4 import BeautifulSoup
+
 class Currency:
   def __init__(self):
     pass
