@@ -63,6 +63,12 @@ def handle_message(event):
     
     if not event.message.text.lower().startswith("%%"):
         return
+    else
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="我是白癡AI"))
+        return
+    
     
     if event.message.text.replace("%%", "", 1) == "啟動":
         working_status = True
