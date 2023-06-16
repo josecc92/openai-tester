@@ -48,7 +48,23 @@ def handle_message(event):
     
     if event.message.type != "text":
         return
-    
+        
+    if event.message.text.lower().startswith("$$$$"):
+        try:
+            msg = currency.get_currency("JPY") 
+            msg += "\n"
+            msg += currency.get_currency("USD") 
+            msg += "\n"
+            msg += currency.get_currency("EUR") 
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=msg))
+        except Exception as e:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=f"發生錯誤: {str(e)}"))
+        return  
+        
     if event.message.text.lower().startswith("$$"):
         try:
             msg = currency.get_currency(event.message.text.replace("$$", "", 1).strip())
