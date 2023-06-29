@@ -77,7 +77,7 @@ def handle_message(event):
                 TextSendMessage(text=f"發生錯誤: {str(e)}"))
         return  
         
-    if event.message.text.lower().startswith("$$N$$"):
+    if event.message.text.lower().startswith("$$n$$"):
         try:
             msg = currency.get_currency_spot("JPY") 
             msg += "\n"
