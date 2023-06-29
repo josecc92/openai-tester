@@ -25,6 +25,6 @@ def get_currency_spot(self, currency_index):
     div_elements = soup.find_all('div', {'class': 'visible-phone print_hide'})
     for div_element in div_elements:
         if currency_index in div_element.text:
-            value = f"{time.text} {div_element.text.strip()} 匯率: {div_element.find_next('td', {'data-table': '本行即期賣出'}).text.strip()}"
+            value = f"{time.text} {div_element.text.strip()} 即期匯率: {div_element.find_next('td', {'data-table': '本行即期賣出'}).text.strip()}"
             return value
     return f"查無{currency_index}即期匯率"
