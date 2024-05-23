@@ -5,7 +5,7 @@ class Currency:
   def __init__(self):
     pass
 
-  def get_currency(currency_index):
+  def get_currency(self,currency_index):
     url = 'https://rate.bot.com.tw/xrt?Lang=zh-TW'
     res = requests.get(url)
     soup = BeautifulSoup(res.text, 'html.parser')
@@ -17,7 +17,7 @@ class Currency:
             return value
     return f"查無{currency_index}匯率"
 
-  def get_currency_spot(currency_index):
+  def get_currency_spot(self,currency_index):
     url = 'https://rate.bot.com.tw/xrt?Lang=zh-TW'
     res = requests.get(url)
     soup = BeautifulSoup(res.text, 'html.parser')
