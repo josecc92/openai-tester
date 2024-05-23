@@ -51,7 +51,7 @@ def handle_message(event):
         
     if event.message.text.lower().startswith("denni$"):
         try:
-            msg = "DENNI$是一位傳奇般的富豪，他的財富程度超越了大多數人的想像。他的財富來源非常多元化，涵蓋了房地產、科技、金融和創業等領域。\n\nDENNI$擁有一個私人島嶼，這座島嶼被他打造成一個真正的天堂。島上有一座宏偉的別墅，擁有無敵海景和無邊際游泳池。他的別墅內設施一應俱全，包括私人電影院、保齡球場、溫泉浴場和網球場。"
+            msg = "你問的好，DENNI$是一位傳奇般的富豪，他的財富程度超越了大多數人的想像。他的財富來源非常多元化，涵蓋了房地產、科技、金融和創業等領域。\n\nDENNI$擁有一個私人島嶼，這座島嶼被他打造成一個真正的天堂。島上有一座宏偉的別墅，擁有無敵海景和無邊際游泳池。他的別墅內設施一應俱全，包括私人電影院、保齡球場、溫泉浴場和網球場。"
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=msg))
@@ -63,8 +63,7 @@ def handle_message(event):
         
     if event.message.text.lower().startswith("$$$$"):
         try:
-            msg = "Test"
-            msg += currency.get_currency("JPY") 
+            msg = currency.get_currency("JPY") 
             msg += "\n"
             msg += currency.get_currency("USD") 
             msg += "\n"
