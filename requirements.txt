@@ -3,3 +3,4 @@ line-bot-sdk
 openai
 requests
 beautifulsoup4
+Werkzeug==2.2.2
