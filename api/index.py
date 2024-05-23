@@ -2,8 +2,8 @@ from flask import Flask, request, abort, render_template
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-from chatgpt import ChatGPT
-from currency import Currency
+from api.chatgpt import ChatGPT
+from api.currency import Currency
 
 import os
 
