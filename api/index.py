@@ -62,7 +62,7 @@ def handle_message(event):
         return  
 
          
-    if event.message.text.lower().startswith("ASA$$$$"):
+    if event.message.text.lower().startswith("asa$$$$"):
         try:
             msg = "ASA里程計算器\n"
             msg += "請輸入購買里程數和獲得的里程百分比，例如：ASA$$$$1000 50\n"
