@@ -71,11 +71,9 @@ def handle_message(event):
             
             if (len(words) == 4 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2]))or (len(words) == 5 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2]) and is_float(words[4])):
                 if words[3].lower().strip() == "cash":
-                    msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程:非必要>"
-                    # ASACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行現金賣出")
+                    ASACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行現金賣出")
                 elif words[3].lower().strip() == "spot":
-                    msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程:非必要>"
-                    #ASACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行即期賣出")
+                    ASACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行即期賣出")
                 else:
                     msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程:非必要>"
             else:
