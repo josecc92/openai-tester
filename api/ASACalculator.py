@@ -1,149 +1,73 @@
-from flask import Flask, request, abort, render_template
-from linebot import LineBotApi, WebhookHandler
-from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
-from api.chatgpt import ChatGPT
 from api.currency import Currency
-from api.ASACalculator import ASACalculator
 
-import os
+# add const variable
+MILES_UNIT_PRICE = 0.0275
+TAX_RATE = 0.075
+# rate type enum
 
-line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
-line_handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
-working_status = os.getenv("DEFALUT_TALKING", default = "true").lower() == "true"
-app = Flask(__name__)
-chatgpt = ChatGPT()
-currency = Currency()
+class ASACalculator:
+    BOOKING_FEE = 25.00
+    AIRPORT_TAX_AND_FEES = 41.00
+    def __init__(self):
+      pass
 
-def is_float(value):
-    try:
-        float_value = float(value)
-        return True
-    except ValueError:
-        return False
-    
-# domain root
-@app.route('/')
-def home():
-    return 'Hello, World!0613'
-
-@app.route("/qrScan")
-def qrScan():
-    try:
-        return render_template("/api/template/qrScan.html")
-    except Exception as e:
-        return f"發生錯誤: {str(e)}"
-    return
-
-@app.route("/webhook", methods=['POST'])
-def callback():
-    # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-    # handle webhook body
-    try:
-        line_handler.handle(body, signature)
-    except InvalidSignatureError:
-        abort(400)
-    return 'OK'
-
-
-@line_handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    global working_status
-    
-    if event.message.type != "text":
-        return
-         
-    try:
-        if event.message.text.lower().startswith("version"):
-            msg = "20240613"
+    def process_bonus_percentage(self,bonus_percentage_string):
+        try:
+            # 嘗試將字符串轉換為浮點數
+            float_value = float(bonus_percentage_string)
             
-        elif event.message.text.lower().startswith("denni$"):
-            msg = "你問的好，DENNI$是一位傳奇般的富豪，他的財富程度超越了大多數人的想像。他的財富來源非常多元化，涵蓋了房地產、科技、金融和創業等領域。\n\nDENNI$擁有一個私人島嶼，這座島嶼被他打造成一個真正的天堂。島上有一座宏偉的別墅，擁有無敵海景和無邊際游泳池。他的別墅內設施一應俱全，包括私人電影院、保齡球場、溫泉浴場和網球場。"
-
-        elif event.message.text.lower().startswith("asmiles"):
-            user_message = event.message.text.strip().lower()
-            # 切分訊息為單詞列表
-            words = user_message.split()
+            # 如果成功轉換，則返回去除百分比後的浮點數
+            return float_value
             
-            if (len(words) == 4 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2]))or (len(words) == 5 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2]) and is_float(words[4])):
-                if words[3].lower().strip() == "cash":
-                    ASACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行現金賣出")
-                elif words[3].lower().strip() == "spot":
-                    ASACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行即期賣出")
-                else:
-                    msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程:非必要>"
-            else:
-                msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程:非必要>"
-            # 將 words 列表的內容顯示為字串
-            words_str = ' '.join(words)
-            msg += f"\n切分後的訊息：{words_str}"
-            msg += f"{len(words) == 4} and {words[0] == "asmiles"} and {is_float(words[1])} and {is_float(words[2])}"
-            msg += f"{len(words) == 5} and {words[0] == "asmiles"} and {is_float(words[1])} and {is_float(words[2])} and {is_float(words[4])}"
-            
-        # currency
-        elif event.message.text.lower().startswith("$$$$"):
-            msg = currency.get_currency("JPY") 
-            msg += "\n"
-            msg += currency.get_currency("USD") 
-            msg += "\n"
-            msg += currency.get_currency("EUR") 
-        
-        elif event.message.text.lower().startswith("$$n$$"):
-            msg = currency.get_currency_spot("JPY") 
-            msg += "\n"
-            msg += currency.get_currency_spot("USD") 
-            msg += "\n"
-            msg += currency.get_currency_spot("EUR") 
+        except ValueError:
+            # 如果無法轉換為浮點數，則當作帶有百分比的字符串處理
+            return int(bonus_percentage_string.replace("%", ""))
 
-        
-        elif event.message.text.lower().startswith("$$"):
-            msg = currency.get_currency(event.message.text.replace("$$", "", 1).strip())
+    def get_bonus_miles(self, bonus_percentage, purchase_miles):
+        return purchase_miles * bonus_percentage / 100
 
-    except Exception as e:
-        msg = f"發生錯誤: {str(e)}"
+    def get_asa_mile_unit_price(self, bonus_percentage_string, purchase_miles, rate_type, round_trip_mileage=0):
+        result_msg = ''
+        bonus_percentage = self.process_bonus_percentage(bonus_percentage_string)
+        bonus_miles = round(self.get_bonus_miles(bonus_percentage, purchase_miles))
+        total_miles = purchase_miles + bonus_miles
+        total_count_usd = purchase_miles * MILES_UNIT_PRICE
+        total_count_tax = total_count_usd * (1 + TAX_RATE)
+        exchange_rate = self.process_bonus_percentage(Currency()._get_exchange_rate('USD', rate_type))
+        result_msg += "==========> Original Purchase\n" 
+        result_msg += f"Purchased miles: {purchase_miles}, {round(bonus_percentage)}% bonus: {bonus_miles}, total miles obtained: {total_miles}\n"
+        result_msg += f"Exchange rate: {exchange_rate}({rate_type}), Unit price: ${round(MILES_UNIT_PRICE, 5)} USD, {round(MILES_UNIT_PRICE * exchange_rate, 3)} NTD\n"
+        result_msg += "==========> Bonus Calculation\n"
+        result_msg += f"Total amount: ${total_count_usd} USD, unit price: ${round(total_count_usd / total_miles, 5)} USD\n"
+        result_msg += f"Total amount: {total_count_usd * exchange_rate} TWD, unit price: {round(total_count_usd * exchange_rate / total_miles, 3)} TWD\n"
+        result_msg += f"==========> Bonus with Tax Recovery Fee Calculation {TAX_RATE * 100}%\n"
+        result_msg += f"Total amount with fee: ${total_count_tax} USD, unit price with fee: ${round(total_count_tax / total_miles, 5)} USD\n"
+        result_msg += f"Total amount with fee: {round(total_count_tax * exchange_rate)} TWD, unit price with fee: {round(total_count_tax * exchange_rate / total_miles, 3)} TWD\n"
+        if(round_trip_mileage > 0):
+            result_msg += "==========> Round-trip Ticket Bonus with Fee and Tax\n"
+            result_msg += f"Round-trip mileage used: {round_trip_mileage}\n"
+            result_msg += f"Round-trip ticket amount: ${round(round_trip_mileage * total_count_tax / total_miles, 2)} USD\n"
+            result_msg += f"Booking Fee: ${self.BOOKING_FEE} USD, Airport Taxes: ${self.AIRPORT_TAX_AND_FEES} USD\n"
+            total_amount = round(round_trip_mileage * total_count_tax / total_miles + self.BOOKING_FEE + self.AIRPORT_TAX_AND_FEES, 2)
+            result_msg += f"Total amount: ${round(total_amount,2)} USD\n"
+            result_msg += f"Total amount: {round(total_amount*exchange_rate)} TWD\n"
+        return f"{result_msg}"
 
-    finally:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=msg)
-        )    
-    
-    if not event.message.text.lower().startswith("%%"):
-        return
-    
-    if event.message.text.lower().startswith("%%"):
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="我是白癡AI"))
-        return
-    
-    
-    if event.message.text.replace("%%", "", 1) == "啟動":
-        working_status = True
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="我是時下流行的AI智能，目前可以為您服務囉，歡迎來跟我互動~"))
-        return
+    def _get_exchange_rate(self, soup, currency_index, rate_type):
+        div_elements = soup.find_all('div', {'class': 'visible-phone print_hide'})
+        for div_element in div_elements:
+            if currency_index in div_element.text:
+                rate = div_element.find_next('td', {'data-table': rate_type}).text.strip()
+                return rate
+        return None
 
-    if event.message.text.replace("%%", "", 1) == "安靜":
-        working_status = False
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="感謝您的使用，若需要我的服務，請跟我說 「啟動」 謝謝~"))
-        return
-    
-    if working_status:
-        chatgpt.add_msg(f"Human:{event.message.text}?請盡量使用繁體中文回應\n")
-        reply_msg = chatgpt.get_response().replace("AI:", "", 1)
-        chatgpt.add_msg(f"{reply_msg}\n")
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=reply_msg))
 
 
 if __name__ == "__main__":
-    app.run()
+    aSACalculator = ASACalculator()
+    #print(aSACalculator.get_asa_mile_unit_price_cash( "50%", 10000,Currency.CASH_RATE))
+    #print(aSACalculator.get_asa_mile_unit_price_cash( 50, 10000,Currency.CASH_RATE))
+    print(aSACalculator.get_asa_mile_unit_price_cash( 70, 30000,Currency.CASH_RATE, 15000))
+    currency_rate = Currency()
+    #print(currency_rate.get_currency('USD'))
+    #print(currency_rate.get_currency_spot('USD'))    
