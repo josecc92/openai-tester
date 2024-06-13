@@ -5,7 +5,7 @@ class Currency:
     QUERY_TIME = ''
     SPOT_RATE = '本行即期賣出'
     CASH_RATE = '本行現金賣出'
-
+    # Test
     def __init__(self):
       pass
 
