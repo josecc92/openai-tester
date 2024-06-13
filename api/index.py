@@ -48,104 +48,63 @@ def handle_message(event):
     
     if event.message.type != "text":
         return
- 
-    if event.message.text.lower().startswith("version"):
-        try:
+         
+    try:
+        if event.message.text.lower().startswith("version"):
             msg = "20240613"
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=msg))
-        except Exception as e:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=f"發生錯誤: {str(e)}"))
-        return  
-        
-    if event.message.text.lower().startswith("denni$"):
-        try:
+            
+        if event.message.text.lower().startswith("denni$"):
             msg = "你問的好，DENNI$是一位傳奇般的富豪，他的財富程度超越了大多數人的想像。他的財富來源非常多元化，涵蓋了房地產、科技、金融和創業等領域。\n\nDENNI$擁有一個私人島嶼，這座島嶼被他打造成一個真正的天堂。島上有一座宏偉的別墅，擁有無敵海景和無邊際游泳池。他的別墅內設施一應俱全，包括私人電影院、保齡球場、溫泉浴場和網球場。"
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=msg))
-        except Exception as e:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=f"發生錯誤: {str(e)}"))
-        return  
 
-    if event.message.text.lower().startswith("miles"):
-        # 切分訊息為單詞列表
-        words = user_message.split()
-        
-        if len(words) == 5 and words[0] == "miles" and words[3].isdigit() and words[4].isdigit():
-            if words[2] == "cash":
-                reply_message = f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，使用現金。"
-            elif words[2] == "spot":
-                reply_message = f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，即期交易。"
+        if event.message.text.lower().startswith("miles"):
+            user_message = event.message.text.strip().lower()
+            # 切分訊息為單詞列表
+            words = user_message.split()
+            
+            if len(words) == 5 and words[0] == "miles" and words[3].isdigit() and words[4].isdigit():
+                if words[2] == "cash":
+                    msg = f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，使用現金。"
+                elif words[2] == "spot":
+                    msg = f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，即期交易。"
+                else:
+                    msg = "提供的指令不正確，請使用以下格式：miles <購買里程數> <cash 或 spot> <獲得的里程百分比>"
             else:
-                reply_message = "提供的指令不正確，請使用以下格式：miles <購買里程數> <cash 或 spot> <獲得的里程百分比>"
+                msg = "提供的指令不完整或格式不正確，請使用以下格式：miles <購買里程數> <cash 或 spot> <獲得的里程百分比>"
         else:
-            reply_message = "提供的指令不完整或格式不正確，請使用以下格式：miles <購買里程數> <cash 或 spot> <獲得的里程百分比>"
-    else:
-        reply_message = "歡迎使用本服務！請輸入 'miles' 來查看相關指令。"
-        
-    if event.message.text.lower().startswith("asa$$$$"):
-        try:
+            msg = "歡迎使用本服務！請輸入 'miles' 來查看相關指令。"
+            
+        if event.message.text.lower().startswith("asa$$$$"):
             msg = "ASA里程計算器\n"
             msg += "請輸入購買里程數和獲得的里程百分比，例如：ASA$$$$1000 50\n"
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=msg))
-        except Exception as e:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=f"發生錯誤: {str(e)}"))
-        return
 
-    if event.message.text.lower().startswith("$$$$"):
-        try:
+
+        # currency
+        if event.message.text.lower().startswith("$$$$"):
             msg = currency.get_currency("JPY") 
             msg += "\n"
             msg += currency.get_currency("USD") 
             msg += "\n"
             msg += currency.get_currency("EUR") 
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=msg))
-        except Exception as e:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=f"發生錯誤: {str(e)}"))
-        return  
         
-    if event.message.text.lower().startswith("$$n$$"):
-        try:
+        if event.message.text.lower().startswith("$$n$$"):
             msg = currency.get_currency_spot("JPY") 
             msg += "\n"
             msg += currency.get_currency_spot("USD") 
             msg += "\n"
             msg += currency.get_currency_spot("EUR") 
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=msg))
-        except Exception as e:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=f"發生錯誤: {str(e)}"))
-        return  
 
-    
-    if event.message.text.lower().startswith("$$"):
-        try:
+        
+        if event.message.text.lower().startswith("$$"):
             msg = currency.get_currency(event.message.text.replace("$$", "", 1).strip())
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=msg))
-        except Exception as e:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=f"發生錯誤: {str(e)}"))
-        return  
+
+    except Exception as e:
+        msg = f"發生錯誤: {str(e)}"
+
+    finally:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=msg)
+        )    
     
     if not event.message.text.lower().startswith("%%"):
         return
