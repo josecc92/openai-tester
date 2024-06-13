@@ -71,16 +71,16 @@ def handle_message(event):
             
             if (len(words) == 4 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2].replace("%", ""))):
                 if words[3].lower().strip() == "cash":
-                    aSACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行現金賣出")
+                    msg = aSACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行現金賣出")
                 elif words[3].lower().strip() == "spot":
-                    aSACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行即期賣出")
+                    msg = aSACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行即期賣出")
                 else:
                     msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot>"
             elif len(words) == 5 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2].replace("%", "")) and is_float(words[4]):
                 if words[3].lower().strip() == "cash":
-                    aSACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行現金賣出",float(words[4]))
+                    msg = aSACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行現金賣出",float(words[4]))
                 elif words[3].lower().strip() == "spot":
-                    aSACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行即期賣出",float(words[4]))
+                    msg = aSACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行即期賣出",float(words[4]))
                 else:
                     msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程>"                    
             else:
