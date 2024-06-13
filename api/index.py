@@ -88,8 +88,7 @@ def handle_message(event):
 
     if event.message.text.lower().startswith("$$$$"):
         try:
-            msg = "0613"
-            msg += currency.get_currency("JPY") 
+            msg = currency.get_currency("JPY") 
             msg += "\n"
             msg += currency.get_currency("USD") 
             msg += "\n"
