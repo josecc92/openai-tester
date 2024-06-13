@@ -61,8 +61,6 @@ def handle_message(event):
             # 切分訊息為單詞列表
             words = user_message.split()
             msg = "ASA里程計算器\n"
-            # show all value in words
-            msg += f"words: {words}\n"
             if len(words) == 5 and words[0] == "miles" and words[3].isdigit() and words[4].isdigit():
                 if words[2] == "cash":
                     msg += f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，使用現金。"
@@ -71,10 +69,8 @@ def handle_message(event):
                 else:
                     msg = "提供的指令不正確，請使用以下格式：miles <購買里程數> <cash 或 spot> <獲得的里程百分比>"
             else:
-                msg += "提供的指令不完整或格式不正確，請使用以下格式：miles <購買里程數> <cash 或 spot> <獲得的里程百分比>"
+                msg += "提供的指令不完整或格式不正確，請使用以下格式：asmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> "
             
-
-
         # currency
         elif event.message.text.lower().startswith("$$$$"):
             msg = f"{currency.get_currency("JPY")}\n"
@@ -86,7 +82,6 @@ def handle_message(event):
             msg+=f"{currency.get_currency_spot('USD')}\n"
             msg+=f"{currency.get_currency_spot('EUR')}"
 
-        
         elif event.message.text.lower().startswith("$$"):
             msg = currency.get_currency(event.message.text.replace("$$", "", 1).strip())
 
