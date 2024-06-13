@@ -81,8 +81,6 @@ def handle_message(event):
             # 將 words 列表的內容顯示為字串
             words_str = ' '.join(words)
             msg += f"\n切分後的訊息：{words_str}"
-            msg += f"{len(words)} and {words[0]} and {words[1]} and {words[2]}"
-            msg += f"{len(words)} and {words[0]} and {words[1]} and {words[2]} and {words[4]}"
             
         # currency
         elif event.message.text.lower().startswith("$$$$"):
