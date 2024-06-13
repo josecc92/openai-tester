@@ -60,7 +60,23 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text=f"發生錯誤: {str(e)}"))
         return  
-        
+
+         
+    if event.message.text.lower().startswith("ASA$$$$"):
+        try:
+            msg = "ASA里程計算器\n"
+            msg += "請輸入購買里程數和獲得的里程百分比，例如：ASA$$$$1000 50\n"
+            msg += ASACalculator.get_asa_mile_unit_price_cash(50, 1000)
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=msg))
+        except Exception as e:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=f"發生錯誤: {str(e)}"))
+        return
+
+    
     if event.message.text.lower().startswith("$$$$"):
         try:
             msg = currency.get_currency("JPY") 
