@@ -66,7 +66,9 @@ def handle_message(event):
         try:
             msg = "ASA里程計算器\n"
             msg += "請輸入購買里程數和獲得的里程百分比，例如：ASA$$$$1000 50\n"
-           
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=msg))
         except Exception as e:
             line_bot_api.reply_message(
                 event.reply_token,
