@@ -60,11 +60,11 @@ class ASACalculator:
                 rate = div_element.find_next('td', {'data-table': rate_type}).text.strip()
                 return rate
         return None
-
-aSACalculator = ASACalculator()
-#print(aSACalculator.get_asa_mile_unit_price_cash( "50%", 10000,Currency.CASH_RATE))
-#print(aSACalculator.get_asa_mile_unit_price_cash( 50, 10000,Currency.CASH_RATE))
-print(aSACalculator.get_asa_mile_unit_price_cash( 70, 30000,Currency.CASH_RATE, 15000))
-currency_rate = Currency()
-#print(currency_rate.get_currency('USD'))
-#print(currency_rate.get_currency_spot('USD'))    
+if __name__ == "__main__":
+    aSACalculator = ASACalculator()
+    #print(aSACalculator.get_asa_mile_unit_price_cash( "50%", 10000,Currency.CASH_RATE))
+    #print(aSACalculator.get_asa_mile_unit_price_cash( 50, 10000,Currency.CASH_RATE))
+    print(aSACalculator.get_asa_mile_unit_price_cash( 70, 30000,Currency.CASH_RATE, 15000))
+    currency_rate = Currency()
+    #print(currency_rate.get_currency('USD'))
+    #print(currency_rate.get_currency_spot('USD'))    
