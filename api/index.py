@@ -67,9 +67,12 @@ def handle_message(event):
                 elif words[2] == "spot":
                     msg = f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，即期交易。"
                 else:
-                    msg = "提供的指令不正確，請使用以下格式：miles <購買里程數> <cash 或 spot> <獲得的里程百分比>"
+                    msg = "指令不正確，使用以下格式\nmiles <購買里程數> <獲得的里程百分比> <cash 或 spot>"
             else:
-                msg = "提供的指令不完整或格式不正確，請使用以下格式：miles <購買里程數> <cash 或 spot> <獲得的里程百分比>"
+                msg = "指令不正確，使用以下格式\nmiles <購買里程數> <獲得的里程百分比> <cash 或 spot>"
+            # 將 words 列表的內容顯示為字串
+            words_str = ' '.join(words)
+            msg += f"\n切分後的訊息：{words_str}"
             
         elif event.message.text.lower().startswith("asa$$$$"):
             msg = "ASA里程計算器\n"
