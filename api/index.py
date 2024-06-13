@@ -73,6 +73,22 @@ def handle_message(event):
                 TextSendMessage(text=f"發生錯誤: {str(e)}"))
         return  
 
+    if event.message.text.lower().startswith("miles"):
+        # 切分訊息為單詞列表
+        words = user_message.split()
+        
+        if len(words) == 5 and words[0] == "miles" and words[3].isdigit() and words[4].isdigit():
+            if words[2] == "cash":
+                reply_message = f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，使用現金。"
+            elif words[2] == "spot":
+                reply_message = f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，即期交易。"
+            else:
+                reply_message = "提供的指令不正確，請使用以下格式：miles <購買里程數> <cash 或 spot> <獲得的里程百分比>"
+        else:
+            reply_message = "提供的指令不完整或格式不正確，請使用以下格式：miles <購買里程數> <cash 或 spot> <獲得的里程百分比>"
+    else:
+        reply_message = "歡迎使用本服務！請輸入 'miles' 來查看相關指令。"
+        
     if event.message.text.lower().startswith("asa$$$$"):
         try:
             msg = "ASA里程計算器\n"
