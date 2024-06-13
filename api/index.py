@@ -14,6 +14,13 @@ app = Flask(__name__)
 chatgpt = ChatGPT()
 currency = Currency()
 
+def is_float(value):
+    try:
+        float_value = float(value)
+        return True
+    except ValueError:
+        return False
+    
 # domain root
 @app.route('/')
 def home():
@@ -56,29 +63,24 @@ def handle_message(event):
         elif event.message.text.lower().startswith("denni$"):
             msg = "你問的好，DENNI$是一位傳奇般的富豪，他的財富程度超越了大多數人的想像。他的財富來源非常多元化，涵蓋了房地產、科技、金融和創業等領域。\n\nDENNI$擁有一個私人島嶼，這座島嶼被他打造成一個真正的天堂。島上有一座宏偉的別墅，擁有無敵海景和無邊際游泳池。他的別墅內設施一應俱全，包括私人電影院、保齡球場、溫泉浴場和網球場。"
 
-        elif event.message.text.lower().startswith("miles"):
+        elif event.message.text.lower().startswith("asmiles"):
             user_message = event.message.text.strip().lower()
             # 切分訊息為單詞列表
             words = user_message.split()
             
-            if len(words) == 5 and words[0] == "miles" and words[3].isdigit() and words[4].isdigit():
-                if words[2] == "cash":
+            if len(words) == 4 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2]):
+                if words[3].lower().strip() == "cash":
                     msg = f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，使用現金。"
-                elif words[2] == "spot":
+                elif words[3].lower().strip() == "spot":
                     msg = f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，即期交易。"
                 else:
-                    msg = "指令不正確，使用以下格式\nmiles <購買里程數> <獲得的里程百分比> <cash 或 spot>"
+                    msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot>"
             else:
-                msg = "指令不正確，使用以下格式\nmiles <購買里程數> <獲得的里程百分比> <cash 或 spot>"
+                msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot>"
             # 將 words 列表的內容顯示為字串
             words_str = ' '.join(words)
             msg += f"\n切分後的訊息：{words_str}"
             
-        elif event.message.text.lower().startswith("asa$$$$"):
-            msg = "ASA里程計算器\n"
-            msg += "請輸入購買里程數和獲得的里程百分比，例如：ASA$$$$1000 50\n"
-
-
         # currency
         elif event.message.text.lower().startswith("$$$$"):
             msg = currency.get_currency("JPY") 
