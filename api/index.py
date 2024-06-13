@@ -17,7 +17,7 @@ currency = Currency()
 # domain root
 @app.route('/')
 def home():
-    return 'Hello, World!1112'
+    return 'Hello, World!0613'
 
 @app.route("/qrScan")
 def qrScan():
@@ -88,7 +88,8 @@ def handle_message(event):
 
     if event.message.text.lower().startswith("$$$$"):
         try:
-            msg = currency.get_currency("JPY") 
+            msg = "0613"
+            msg += currency.get_currency("JPY") 
             msg += "\n"
             msg += currency.get_currency("USD") 
             msg += "\n"
