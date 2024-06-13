@@ -68,15 +68,15 @@ def handle_message(event):
             # 切分訊息為單詞列表
             words = user_message.split()
             
-            if len(words) == 4 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2]):
+            if (len(words) == 4 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2]))or (len(words) == 5 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2]) and is_float(words[4])):
                 if words[3].lower().strip() == "cash":
                     msg = f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，使用現金。"
                 elif words[3].lower().strip() == "spot":
                     msg = f"已接收到購買里程數：{words[1]}，獲得的里程百分比：{words[3]}%，即期交易。"
                 else:
-                    msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot>"
+                    msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程:非必要>"
             else:
-                msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot>"
+                msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程:非必要>"
             # 將 words 列表的內容顯示為字串
             words_str = ' '.join(words)
             msg += f"\n切分後的訊息：{words_str}"
