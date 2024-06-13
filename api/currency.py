@@ -69,7 +69,7 @@ def handle_message(event):
             # 切分訊息為單詞列表
             words = user_message.split()
             
-            if (len(words) == 4 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2]))or (len(words) == 5 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2]) and is_float(words[4])):
+            if (len(words) == 4 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2].replace("%", "")))or (len(words) == 5 and words[0] == "asmiles" and is_float(words[1]) and is_float(words[2].replace("%", "")) and is_float(words[4])):
                 if words[3].lower().strip() == "cash":
                     ASACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行現金賣出")
                 elif words[3].lower().strip() == "spot":
