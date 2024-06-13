@@ -73,17 +73,6 @@ def handle_message(event):
             words_str = ' '.join(words)
             msg += f"\n切分後的訊息：{words_str}"
 
-    
-          
-            
-    
-
-          
-          Expand Down
-    
-    
-  
-            
         # currency
         elif event.message.text.lower().startswith("$$$$"):
             msg = currency.get_currency("JPY") 
