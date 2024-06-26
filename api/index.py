@@ -84,9 +84,17 @@ def handle_message(event):
                     elif words[3].lower().strip() == "spot":
                         msg = aSACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行即期賣出",float(words[4]))
                 else:
-                    msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程>"                    
+                    msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程>"       
+            elif len(words) == 6:
+                if(words[0] == "asmiles" and is_float(words[1]) and is_float(words[2].replace("%", "")) and is_float(words[4])):
+                    if words[3].lower().strip() == "cash":
+                        msg = aSACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行現金賣出",float(words[4]),words[5])
+                    elif words[3].lower().strip() == "spot":
+                        msg = aSACalculator.get_asa_mile_unit_price(words[2], float(words[1]), "本行即期賣出",float(words[4]),words[5])
+                else:
+                    msg = "指令不正確，使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程> <日本機場代碼>"                                   
             else:
-                msg = "使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程:非必要>"
+                msg = "使用以下格式\nasmiles <購買里程數> <獲得的里程百分比> <cash 或 spot> <來回機票所用里程:非必要> <日本機場代碼:非必要>"
             # 將 words 列表的內容顯示為字串
 
         # currency
