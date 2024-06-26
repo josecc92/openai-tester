@@ -1,13 +1,25 @@
-from api.currency import Currency
+from currency import Currency
 
 # add const variable
 MILES_UNIT_PRICE = 0.0275
 TAX_RATE = 0.075
-# rate type enum
 
 class ASACalculator:
     BOOKING_FEE = 25.00
-    AIRPORT_TAX_AND_FEES = 41.00
+    JPN_AIRPORT_TAX_AND_FEES = 24.8 #default value HND $41
+    TPE_AIRPORT_TAX_AND_FEES = 15.5
+    # rate type enum
+    AIRPORT_TAXES = {
+        "KIX": 25.7,
+        "NRT": 25.1,        
+        "NGO": 24.9,        
+        "HND": 24.8,
+        "OKA": 14,
+        "FUK": 12.4,        
+        "SDJ": 12.2,
+        "HKD": 12.2,
+        "KMJ": 10.7
+    }
     def __init__(self):
       pass
 
@@ -26,7 +38,7 @@ class ASACalculator:
     def get_bonus_miles(self, bonus_percentage, purchase_miles):
         return purchase_miles * bonus_percentage / 100
 
-    def get_asa_mile_unit_price(self, bonus_percentage_string, purchase_miles, rate_type, round_trip_mileage=0):
+    def get_asa_mile_unit_price(self, bonus_percentage_string, purchase_miles, rate_type, round_trip_mileage=0, jpn_airport = "HND"):
         result_msg = ''
         bonus_percentage = self.process_bonus_percentage(bonus_percentage_string)
         bonus_miles = round(self.get_bonus_miles(bonus_percentage, purchase_miles))
@@ -34,6 +46,11 @@ class ASACalculator:
         total_count_usd = purchase_miles * MILES_UNIT_PRICE
         total_count_tax = total_count_usd * (1 + TAX_RATE)
         exchange_rate = self.process_bonus_percentage(Currency()._get_exchange_rate('USD', rate_type))
+        if(jpn_airport.upper() in self.AIRPORT_TAXES):
+            self.JPN_AIRPORT_TAX_AND_FEES = self.AIRPORT_TAXES[jpn_airport.upper()]
+        else:
+            jpn_airport = "HND"
+
         result_msg += "==========> Original Purchase\n" 
         result_msg += f"Purchased miles: {purchase_miles}, {round(bonus_percentage)}% bonus: {bonus_miles}, total miles obtained: {total_miles}\n"
         result_msg += f"Exchange rate: {exchange_rate}({rate_type}), Unit price: ${round(MILES_UNIT_PRICE, 5)} USD, {round(MILES_UNIT_PRICE * exchange_rate, 3)} NTD\n"
@@ -44,13 +61,12 @@ class ASACalculator:
         result_msg += f"Total amount with fee: ${total_count_tax} USD, unit price with fee: ${round(total_count_tax / total_miles, 5)} USD\n"
         result_msg += f"Total amount with fee: {round(total_count_tax * exchange_rate)} TWD, unit price with fee: {round(total_count_tax * exchange_rate / total_miles, 3)} TWD\n"
         if(round_trip_mileage > 0):
-            result_msg += "==========> Round-trip Ticket Bonus with Fee and Tax\n"
+            result_msg += "==========> Round-trip Ticket Bonus with Fee and Tax(per person)\n"
             result_msg += f"Round-trip mileage used: {round_trip_mileage}\n"
             result_msg += f"Round-trip ticket amount: ${round(round_trip_mileage * total_count_tax / total_miles, 2)} USD\n"
-            result_msg += f"Booking Fee: ${self.BOOKING_FEE} USD, Airport Taxes: ${self.AIRPORT_TAX_AND_FEES} USD\n"
-            total_amount = round(round_trip_mileage * total_count_tax / total_miles + self.BOOKING_FEE + self.AIRPORT_TAX_AND_FEES, 2)
-            result_msg += f"Total amount: ${round(total_amount,2)} USD\n"
-            result_msg += f"Total amount: {round(total_amount*exchange_rate)} TWD\n"
+            result_msg += f"Booking Fee: ${self.BOOKING_FEE} USD, Airport({jpn_airport.upper()}) Taxes: ${self.JPN_AIRPORT_TAX_AND_FEES + self.TPE_AIRPORT_TAX_AND_FEES} USD\n"
+            total_amount = round(round_trip_mileage * total_count_tax / total_miles + self.BOOKING_FEE + self.JPN_AIRPORT_TAX_AND_FEES  + self.TPE_AIRPORT_TAX_AND_FEES, 2)
+            result_msg += f"Total amount: ${round(total_amount,2)} USD, {round(total_amount*exchange_rate)} TWD\n"
         return f"{result_msg}"
 
     def _get_exchange_rate(self, soup, currency_index, rate_type):
@@ -65,9 +81,7 @@ class ASACalculator:
 
 if __name__ == "__main__":
     aSACalculator = ASACalculator()
-    #print(aSACalculator.get_asa_mile_unit_price_cash( "50%", 10000,Currency.CASH_RATE))
-    #print(aSACalculator.get_asa_mile_unit_price_cash( 50, 10000,Currency.CASH_RATE))
-    print(aSACalculator.get_asa_mile_unit_price_cash( 70, 30000,Currency.CASH_RATE, 15000))
+    print(aSACalculator.get_asa_mile_unit_price( 70, 30000,Currency.CASH_RATE, 15000,"KIX"))
     currency_rate = Currency()
     #print(currency_rate.get_currency('USD'))
     #print(currency_rate.get_currency_spot('USD'))    
