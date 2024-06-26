@@ -1,4 +1,4 @@
-from currency import Currency
+from api.currency import Currency
 
 # add const variable
 MILES_UNIT_PRICE = 0.0275
